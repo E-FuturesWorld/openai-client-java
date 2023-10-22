@@ -1,0 +1,9 @@
+open-ai:
+  client:
+    configuration:
+      apiKey:
+      contentType:
+      model:
+      temperature:
+      tokens:
+      maxToken:

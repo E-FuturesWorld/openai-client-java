@@ -1,6 +1,8 @@
-package com.efutures;
+package com.efutures.service;
 
 import com.efutures.client.OpenAIClient;
+import feign.FeignException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -8,6 +10,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 
 @Service
+@Slf4j
 public class OpenAIService {
 
     private final OpenAIClient client;
@@ -19,10 +22,27 @@ public class OpenAIService {
         this.executorService = executorService;
     }
 
-    public CompletableFuture<ResponseEntity<String>> getModels(){
-        CompletableFuture<ResponseEntity<String>> responseEntityCompletableFuture = CompletableFuture.supplyAsync(() -> client.listModels(), executorService)
-                .whenCompleteAsync((stringResponseEntity, throwable) -> {
-                }, executorService);
-        return responseEntityCompletableFuture;
+    public  String listModels(){
+        String execute = execute(client.listModels());
+        return execute;
+
+
     }
+
+    public static <T> T execute(ResponseEntity<T> apiCall){
+
+//        try{
+//            return apiCall.getBody();
+//        } catch (FeignException.FeignClientException e){
+//        }
+        try {
+            return apiCall.getBody();
+        }catch (FeignException.FeignClientException e){
+            log.info("Error {}",e.responseBody().get());
+        }
+
+        return null;
+    }
+
+
 }
