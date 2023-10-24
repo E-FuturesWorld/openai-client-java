@@ -21,7 +21,7 @@ public class YamlPropertySourceFactory implements PropertySourceFactory {
         String activeProfile = Optional.ofNullable(System.getenv("SPRING_PROFILES_ACTIVE"))
                 .orElse(System.getProperty("spring.profiles.active"));
 
-        log.info("MarvelousApiClient active profile: " + activeProfile);
+        log.info("EfuturesWorld OpenAI Client Library active profile: " + activeProfile);
         assert activeProfile != null;
 
         YamlPropertiesFactoryBean yamlFactory = new YamlPropertiesFactoryBean();

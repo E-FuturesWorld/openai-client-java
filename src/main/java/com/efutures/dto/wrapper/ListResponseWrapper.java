@@ -12,6 +12,6 @@ import java.util.List;
 @Builder
 public class ListResponseWrapper <T>{
 
-    public List<T> content;
+    public List<T> data;
 
 }

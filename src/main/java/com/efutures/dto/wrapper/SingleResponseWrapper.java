@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class SingleResponseWrapper<T> {
 
-    public T content;
+    public T data;
 
 
 }
