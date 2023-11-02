@@ -1,4 +1,4 @@
-package com.efutures.dto.model;
+package com.efutures.dto.response.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 

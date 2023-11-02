@@ -1,10 +1,11 @@
 package com.efutures.client;
 
 import com.efutures.config.AuthorizationInterceptor;
-import com.efutures.dto.completion.CreateCompletion;
-import com.efutures.dto.model.Model;
+import com.efutures.dto.request.completion.CreateCompletion;
+import com.efutures.dto.response.CompletionObject;
+import com.efutures.dto.response.model.Model;
+import com.efutures.dto.response.ChatCompletion;
 import com.efutures.dto.wrapper.ListResponseWrapper;
-import com.efutures.dto.wrapper.SingleResponseWrapper;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,9 @@ public interface OpenAIClient {
     ResponseEntity<Model> getModel(@PathVariable("model_id")String modelId);
     @PostMapping("v1/completions")
     ResponseEntity<String> createCompletion(@RequestBody CreateCompletion createCompletion);
+
+    @PostMapping("v1/completions")
+    ResponseEntity<CompletionObject> extractChoices(@RequestBody CreateCompletion createCompletion);
 
 
 }

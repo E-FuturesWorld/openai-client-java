@@ -1,4 +1,4 @@
-package com.efutures.dto.error;
+package com.efutures.dto.response.error;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
