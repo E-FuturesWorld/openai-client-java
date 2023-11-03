@@ -6,6 +6,7 @@ import com.efutures.dto.response.CompletionObject;
 import com.efutures.dto.response.model.Model;
 import com.efutures.dto.response.ChatCompletion;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +47,11 @@ public class OpenAIService {
          return  extract;
      }
 
+    public <T> T extractFromCompletion(CreateCompletion createCompletion, TypeReference<T> targetType, int choiceIndex){
+        T extract = extract(client.extractChoices(createCompletion), targetType, 0);
+        return  extract;
+    }
+
     private <T> T execute(ResponseEntity<T> apiCall){
         return CompletableFuture.supplyAsync(() -> {
             return apiCall.getBody();
@@ -62,9 +68,25 @@ public class OpenAIService {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-
-
     }
+
+    private <T> T extract(ResponseEntity<CompletionObject> apiCall, TypeReference<T> targetType, int choiceIndex) {
+        List<CompletionObject.Choice> choices = apiCall.getBody().getChoices();
+
+        if (choices.isEmpty()) {
+            throw new IllegalArgumentException("No choices available in the response.");
+        }
+
+        String text = choices.get(0).getText(); // Extract the text from the first (and possibly only) choice
+        log.info("text: {}", text);
+
+        try {
+            return mapper.readValue(text, targetType);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
 //    private <T> T extract(ResponseEntity<ChatCompletion> apiCall, Class<T> targetType, int choiceIndex) {
 //        ChatCompletion.Choice choice1 = execute(apiCall).getChoices().get(choiceIndex);
