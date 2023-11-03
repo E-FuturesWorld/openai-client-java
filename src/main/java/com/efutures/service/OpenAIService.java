@@ -77,7 +77,7 @@ public class OpenAIService {
             throw new IllegalArgumentException("No choices available in the response.");
         }
 
-        String text = choices.get(0).getText(); // Extract the text from the first (and possibly only) choice
+        String text = choices.get(choiceIndex).getText(); // Extract the text from the first (and possibly only) choice
         log.info("text: {}", text);
 
         try {
