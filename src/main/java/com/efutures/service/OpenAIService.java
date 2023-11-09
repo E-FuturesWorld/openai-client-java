@@ -4,7 +4,8 @@ import com.efutures.client.OpenAIClient;
 import com.efutures.dto.request.completion.CreateCompletion;
 import com.efutures.dto.response.CompletionObject;
 import com.efutures.dto.response.model.Model;
-import com.efutures.dto.response.ChatCompletion;
+import com.efutures.exceptio.JsonConverterException;
+import com.efutures.exceptio.NoChoiceException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -66,7 +67,9 @@ public class OpenAIService {
         try {
             return mapper.readValue(text,targetType);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            //throw new RuntimeException(e);
+            throw new JsonConverterException("Error while extracting data",e);
+
         }
     }
 
@@ -74,7 +77,8 @@ public class OpenAIService {
         List<CompletionObject.Choice> choices = apiCall.getBody().getChoices();
 
         if (choices.isEmpty()) {
-            throw new IllegalArgumentException("No choices available in the response.");
+//            throw new IllegalArgumentException("No choices available in the response.");
+            throw new NoChoiceException("No choices available in the response.");
         }
 
         String text = choices.get(choiceIndex).getText(); // Extract the text from the first (and possibly only) choice
@@ -83,7 +87,8 @@ public class OpenAIService {
         try {
             return mapper.readValue(text, targetType);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            //throw new RuntimeException(e);
+            throw new JsonConverterException("Error while extracting data",e);
         }
     }
 
